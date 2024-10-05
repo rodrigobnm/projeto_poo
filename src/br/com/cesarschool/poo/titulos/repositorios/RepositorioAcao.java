@@ -1,40 +1,115 @@
 package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.Acao;
-/*
- * Deve gravar em e ler de um arquivo texto chamado Acao.txt os dados dos objetos do tipo
- * Acao. Seguem abaixo exemplos de linhas (identificador, nome, dataValidade, valorUnitario)
- * 
-    1;PETROBRAS;2024-12-12;30.33
-    2;BANCO DO BRASIL;2026-01-01;21.21
-    3;CORREIOS;2027-11-11;6.12 
- * 
- * A inclusão deve adicionar uma nova linha ao arquivo. Não é permitido incluir 
- * identificador repetido. Neste caso, o método deve retornar false. Inclusão com 
- * sucesso, retorno true.
- * 
- * A alteração deve substituir a linha atual por uma nova linha. A linha deve ser 
- * localizada por identificador que, quando não encontrado, enseja retorno false. 
- * Alteração com sucesso, retorno true.  
- *   
- * A exclusão deve apagar a linha atual do arquivo. A linha deve ser 
- * localizada por identificador que, quando não encontrado, enseja retorno false. 
- * Exclusão com sucesso, retorno true.
- * 
- * A busca deve localizar uma linha por identificador, materializar e retornar um 
- * objeto. Caso o identificador não seja encontrado no arquivo, retornar null.   
- */
+
+import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class RepositorioAcao {
-	public boolean incluir(Acao acao) {
-		return false;
-	}
-	public boolean alterar(Acao acao) {
-		return false;
-	}
-	public boolean excluir(int identificador) {
-		return false;
-	}
-	public Acao buscar(int identificador) {
-		return null;
-	}
+
+    private static final String ARQUIVO = "Acao.txt";
+
+    public boolean incluir(Acao acao) {
+        if (buscar(acao.getIdentificador()) != null) {
+            return false; // Identificador jÃ¡ existe
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO, true))) {
+            String linha = acao.getIdentificador() + ";" +
+                    acao.getNome() + ";" +
+                    acao.getDataValidade() + ";" +
+                    acao.getValorUnitario();
+            writer.write(linha);
+            writer.newLine();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean alterar(Acao acao) {
+        List<Acao> acoes = listarTodas();
+        boolean encontrado = false;
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO))) {
+            for (Acao ac : acoes) {
+                if (ac.getIdentificador() == acao.getIdentificador()) {
+                    ac = acao; // Substitui a aÃ§Ã£o encontrada
+                    encontrado = true;
+                }
+                String linha = ac.getIdentificador() + ";" +
+                        ac.getNome() + ";" +
+                        ac.getDataValidade() + ";" +
+                        ac.getValorUnitario();
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encontrado;
+    }
+
+    public boolean excluir(int identificador) {
+        List<Acao> acoes = listarTodas();
+        boolean encontrado = false;
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO))) {
+            for (Acao ac : acoes) {
+                if (ac.getIdentificador() != identificador) {
+                    String linha = ac.getIdentificador() + ";" +
+                            ac.getNome() + ";" +
+                            ac.getDataValidade() + ";" +
+                            ac.getValorUnitario();
+                    writer.write(linha);
+                    writer.newLine();
+                } else {
+                    encontrado = true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encontrado;
+    }
+
+    public Acao buscar(int identificador) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(";");
+                int id = Integer.parseInt(dados[0]);
+                if (id == identificador) {
+                    String nome = dados[1];
+                    LocalDate dataValidade = LocalDate.parse(dados[2]);
+                    double valorUnitario = Double.parseDouble(dados[3]);
+                    return new Acao(id, nome, dataValidade, valorUnitario);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Acao> listarTodas() {
+        List<Acao> acoes = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(";");
+                int id = Integer.parseInt(dados[0]);
+                String nome = dados[1];
+                LocalDate dataValidade = LocalDate.parse(dados[2]);
+                double valorUnitario = Double.parseDouble(dados[3]);
+                Acao acao = new Acao(id, nome, dataValidade, valorUnitario);
+                acoes.add(acao);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return acoes;
+    }
 }
