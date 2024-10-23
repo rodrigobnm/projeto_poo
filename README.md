@@ -3,7 +3,10 @@
 
 ## CRUD
 
-### Etapa 1 ✅
+### Entrega 1 ✅
+
+<br>
+<br>
 
 ## Equipe:
 <ul>
