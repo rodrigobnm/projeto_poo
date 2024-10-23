@@ -1,9 +1,7 @@
 # Atividade Continuada, Programação Orientada a Objetos
 
 
-## CRUD
-
-### Entrega 1 ✅
+## Entrega 1 ✅
 
 <br>
 <br>
