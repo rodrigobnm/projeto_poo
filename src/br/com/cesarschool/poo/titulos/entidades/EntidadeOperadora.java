@@ -1,61 +1,66 @@
 package br.com.cesarschool.poo.titulos.entidades;
 
-public class EntidadeOperadora {
-	private long identificador;
-	private String nome;
-	private boolean autorizadoAcao;
-	private double saldoAcao;
-	private double saldoTituloDivida;
+import br.gov.cesarschool.poo.daogenerico.Entidade;
+public class EntidadeOperadora extends Entidade {
+    private static final long serialVersionUID = 1L;
+    
+    private long identificador;
+    private String nome;
+    private boolean autorizadoAcao;
+    private double saldoAcao;
+    private double saldoTituloDivida;
 	
-	public EntidadeOperadora(long identificador, String nome, boolean autorizadoAcao, double saldoAcao, double saldoTituloDivida) {
-		this.identificador = identificador;
-		this.nome = nome;
-		this.autorizadoAcao = autorizadoAcao;
-		this.saldoAcao = saldoAcao;
-		this.saldoTituloDivida = saldoTituloDivida;
-	}
-	
-	public long getIdentificador() {
-		return identificador;
-	}
+    public EntidadeOperadora(long identificador, String nome, double autorizadoAcao) {
+        super();
+        this.identificador = identificador;
+        this.nome = nome;
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public long getIdentificador() {
+        return identificador;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    @Override
+    public String getIdUnico() {
+        return String.valueOf(identificador);
+    }
+    public String getNome() {
+        return nome;
+    }
 
-	public boolean getAutorizadoAcao() {
-		return autorizadoAcao;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setAutorizadoAcao(boolean autorizadoAcao) {
-		this.autorizadoAcao = autorizadoAcao;
-	}
-	
-	public double getSaldoAcao() {
-		return saldoAcao;
-	}
+    public boolean isAutorizadoAcao() {
+        return autorizadoAcao;
+    }
 
-	public double getSaldoTituloDivida() {
-		return saldoTituloDivida;
-	}
+    public void setAutorizadoAcao(boolean autorizadoAcao) {
+        this.autorizadoAcao = autorizadoAcao;
+    }
 
-	public void creditarSaldoAcao(double valor) {
-		saldoAcao += valor;
-	}
+    public double getSaldoAcao() {
+        return saldoAcao;
+    }
 
-	public void debitarSaldoAcao(double valor) {
-		saldoAcao -= valor;
-	}
+    public double getSaldoTituloDivida() {
+        return saldoTituloDivida;
+    }
 
-	public void creditarSaldoTituloDivida(double valor) {
-		saldoTituloDivida += valor;
-	}
+    public void creditarSaldoAcao(double valor) {
+        saldoAcao += valor;
+    }
 
-	public void debitarSaldoTituloDivida(double valor) {
-		saldoTituloDivida -= valor; 
-	}	
+    public void debitarSaldoAcao(double valor) {
+        saldoAcao -= valor;
+    }
+
+    public void creditarSaldoTituloDivida(double valor) {
+        saldoTituloDivida += valor;
+    }
+
+    public void debitarSaldoTituloDivida(double valor) {
+        saldoTituloDivida -= valor;
+    }
 }
